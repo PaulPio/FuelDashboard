@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lubricant Equivalents &middot; Stem Fuels</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230F1922'/%3E%3Cpath d='M16 6c4.2 5 7 8.5 7 11.8A7 7 0 0 1 9 17.8C9 14.5 11.8 11 16 6z' fill='%23B4741A'/%3E%3C/svg%3E">
+<style>
+/* ---------------------------------------------------------------------------
+   Palette: engine-room, not office. Cold steel ground, sight-glass amber accent.
+   Type: product names are set in mono because they ARE codes - and because the
+   grade digits inside them are the one thing that must never be misread.
+--------------------------------------------------------------------------- */
+:root{
+  --ink:#0F1922; --steel:#1C2A36; --haze:#64798A; --rule:#D6DCE2;
+  --paper:#EEF1F4; --card:#FFFFFF;
+  --oil:#B4741A; --oil-soft:#FBF3E4;
+  --flag:#B3372A; --flag-soft:#FBECEA;
+  --sea:#186273; --sea-soft:#E8F1F3;
+  --sans:ui-sans-serif,"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+  --mono:ui-monospace,"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--sans);
+  font-size:16px; line-height:1.45; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:940px;margin:0 auto;padding:0 20px}
+
+/* --- masthead ----------------------------------------------------------- */
+.masthead{background:var(--ink);color:#fff}
+.masthead .wrap{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding-top:13px;padding-bottom:13px}
+.mark{font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:13px}
+.masthead h1{
+  margin:0;font-size:13px;font-weight:400;letter-spacing:.16em;
+  text-transform:uppercase;color:#8DA2B4;
+}
+.masthead .spacer{flex:1}
+.masthead .place{font-size:12px;color:#5D7183;letter-spacing:.04em}
+
+/* --- search ------------------------------------------------------------- */
+.search-zone{background:var(--card);border-bottom:1px solid var(--rule)}
+.search-zone .wrap{padding-top:30px;padding-bottom:26px}
+.eyebrow{
+  font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--haze);font-weight:600;margin:0 0 10px
+}
+.field{position:relative}
+.field input{
+  width:100%;font-family:var(--mono);font-size:22px;color:var(--ink);
+  padding:15px 46px 15px 16px;border:1.5px solid var(--rule);border-radius:3px;
+  background:var(--card);outline:none;
+}
+.field input::placeholder{color:#A6B4C0;font-family:var(--sans);font-size:17px}
+/* Suppress the browser's own clear affordance - we render our own. */
+.field input::-webkit-search-cancel-button,
+.field input::-webkit-search-decoration{-webkit-appearance:none;appearance:none;display:none}
+.field input:focus{border-color:var(--oil);box-shadow:0 0 0 3px var(--oil-soft)}
+.field .clear{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  border:0;background:none;color:var(--haze);font-size:22px;line-height:1;
+  cursor:pointer;padding:6px 10px;border-radius:3px;
+}
+.field .clear:hover{color:var(--ink);background:var(--paper)}
+.field .clear:focus-visible{outline:2px solid var(--oil);outline-offset:1px}
+.hint{margin:9px 0 0;font-size:12.5px;color:var(--haze)}
+.hint b{color:var(--steel);font-weight:600}
+
+/* --- suggestions -------------------------------------------------------- */
+.suggest{margin:14px 0 0;padding:0;list-style:none;border-top:1px solid var(--rule)}
+.suggest li{border-bottom:1px solid var(--rule)}
+.suggest button{
+  width:100%;display:flex;align-items:center;gap:12px;text-align:left;
+  background:none;border:0;padding:11px 6px;cursor:pointer;font:inherit;color:inherit;
+}
+.suggest button:hover,.suggest button:focus-visible{background:var(--oil-soft);outline:none}
+.suggest .nm{font-family:var(--mono);font-size:15px;flex:1;min-width:0}
+.suggest .bd{font-size:12px;color:var(--haze);white-space:nowrap}
+.suggest .ct{font-size:11px;color:var(--haze);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.pick-note{
+  margin:14px 0 0;font-size:13px;color:var(--steel);
+  background:var(--oil-soft);border-left:3px solid var(--oil);padding:10px 13px;border-radius:0 3px 3px 0;
+}
+
+/* --- results ------------------------------------------------------------ */
+main{padding:26px 0 60px}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:4px;margin-bottom:18px;overflow:hidden}
+.card-head{
+  display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  padding:13px 18px;border-bottom:1px solid var(--rule);background:#FAFBFC;
+}
+.cat{font-size:12px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--steel)}
+.card-head .spacer{flex:1}
+.srcref{font-size:11px;color:var(--haze);font-family:var(--mono)}
+
+.line{
+  display:flex;align-items:center;gap:14px;padding:9px 18px;
+  border-bottom:1px solid #EFF2F5;
+}
+.line:last-child{border-bottom:0}
+.line.is-match{background:var(--oil-soft);box-shadow:inset 3px 0 0 var(--oil)}
+.line.is-empty .prod{color:#9FADB9}
+
+.logo{width:74px;height:26px;flex:none;display:flex;align-items:center}
+.logo img{max-width:100%;max-height:100%;object-fit:contain;object-position:left center}
+.brand{
+  width:104px;flex:none;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--haze);font-weight:600;
+}
+.prod{flex:1;min-width:0;font-family:var(--mono);font-size:15.5px;word-break:break-word}
+/* THE point of this tool: grade digits carry the whole meaning, so they are
+   picked out. 'Alexia 40' vs 'Alexia 100' must never be read at a glance as one. */
+.prod .g{color:var(--oil);font-weight:700}
+.prod .also{display:block;font-family:var(--sans);font-size:11.5px;color:var(--haze);margin-top:1px}
+.prod .none{font-family:var(--sans);font-size:13.5px;font-style:italic}
+
+.tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;flex:none;max-width:250px}
+.tag{
+  font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;
+  padding:2.5px 7px;border-radius:2px;white-space:nowrap;
+}
+.tag.spec{background:var(--sea-soft);color:var(--sea)}
+.tag.obs{background:var(--flag-soft);color:var(--flag)}
+.tag.approx{background:var(--sea-soft);color:var(--sea)}
+.tag.warn{background:var(--oil-soft);color:var(--oil)}
+
+.card-foot{display:flex;gap:9px;padding:12px 18px;background:#FAFBFC;border-top:1px solid var(--rule);flex-wrap:wrap}
+.btn{
+  font:inherit;font-size:13px;font-weight:600;padding:7px 14px;border-radius:3px;
+  border:1px solid var(--rule);background:var(--card);color:var(--steel);cursor:pointer;
+}
+.btn:hover{border-color:var(--haze)}
+.btn:focus-visible{outline:2px solid var(--oil);outline-offset:1px}
+.btn.done{background:var(--oil);border-color:var(--oil);color:#fff}
+
+/* --- empty / zero states ------------------------------------------------ */
+.state{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:34px 22px;text-align:center}
+.state h2{margin:0 0 7px;font-size:17px}
+.state p{margin:0;color:var(--haze);font-size:14px}
+.state.miss{border-color:#E4C9C5}
+.state.miss h2{color:var(--flag)}
+
+/* --- browse ------------------------------------------------------------- */
+.browse h2{
+  font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--haze);
+  margin:0 0 12px;font-weight:600;
+}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{
+  font:inherit;font-size:13px;padding:6px 12px;border-radius:99px;cursor:pointer;
+  border:1px solid var(--rule);background:var(--card);color:var(--steel);
+}
+.chip:hover{border-color:var(--oil);color:var(--oil)}
+.chip:focus-visible{outline:2px solid var(--oil);outline-offset:1px}
+
+/* --- notice ------------------------------------------------------------- */
+.notice{
+  background:#FFF9EC;border:1px solid #E8D6AE;border-radius:4px;
+  padding:13px 16px;font-size:13px;color:#6B5116;margin-bottom:18px;
+}
+.notice b{color:#4A3809}
+
+footer{border-top:1px solid var(--rule);padding:20px 0 40px;font-size:12px;color:var(--haze)}
+footer .wrap{display:flex;gap:8px 22px;flex-wrap:wrap}
+footer code{font-family:var(--mono);font-size:11.5px}
+
+@media (max-width:640px){
+  .line{flex-wrap:wrap;gap:6px 12px;padding:11px 14px}
+  .brand{width:auto;order:2}
+  .logo{order:1;width:58px;height:20px}
+  .prod{order:4;flex-basis:100%;font-size:15px}
+  .tags{order:3;justify-content:flex-start;max-width:none}
+  .field input{font-size:18px}
+  .card-head,.card-foot{padding-left:14px;padding-right:14px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .card{animation:rise .18s ease-out}
+  @keyframes rise{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+}
+@media print{
+  body{background:#fff}
+  .search-zone,footer,.card-foot,.browse,.masthead .place{display:none}
+  .card{border-color:#999;break-inside:avoid}
+  .line.is-match{background:none;box-shadow:inset 3px 0 0 #000}
+  .prod .g{color:#000}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <span class="mark">Stem Fuels</span>
+    <h1>Lubricant Equivalents</h1>
+    <span class="spacer"></span>
+    <span class="place">Valencia</span>
+  </div>
+</header>
+
+<section class="search-zone">
+  <div class="wrap">
+    <p class="eyebrow">What is the customer using now?</p>
+    <div class="field">
+      <input id="q" type="search" autocomplete="off" spellcheck="false"
+             placeholder="Product name, brand or category - e.g. Mobilgard 300"
+             aria-label="Search for a product, brand or category">
+      <button class="clear" id="clear" type="button" aria-label="Clear search" hidden>&times;</button>
+    </div>
+    <p class="hint" id="hint"></p>
+    <div id="picker"></div>
+  </div>
+</section>
+
+<main>
+  <div class="wrap" id="out" aria-live="polite"></div>
+</main>
+
+<footer>
+  <div class="wrap" id="foot"></div>
+</footer>
+
+<script>
+const DATA = __DATA__;
+
+const BRANDS = DATA.brands;
+const ROWS = DATA.rows;
+const INDEX = DATA.index;
+const LOGOS = DATA.logos;
+const BRAND_NAME = Object.fromEntries(BRANDS.map(b => [b.id, b.name]));
+
+const $q = document.getElementById('q');
+const $clear = document.getElementById('clear');
+const $hint = document.getElementById('hint');
+const $picker = document.getElementById('picker');
+const $out = document.getElementById('out');
+
+/* ---- text helpers ------------------------------------------------------ */
+const norm = s => s.toLowerCase().replace(/[^\w\s]+/g, ' ').replace(/\s+/g, ' ').trim();
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* The grade number is the load-bearing part of every one of these names. */
+const gradeOf = s => { const m = norm(s).match(/(\d+)(?!.*\d)/); return m ? m[1] : null; };
+const markGrades = s => esc(s).replace(/\d+/g, d => '<span class="g">' + d + '</span>');
+
+/* ---- search ------------------------------------------------------------ */
+const NAMES = Object.keys(INDEX);
+
+function trigrams(s){
+  const p = '  ' + s + ' ', out = new Set();
+  for (let i = 0; i < p.length - 2; i++) out.add(p.slice(i, i + 3));
+  return out;
+}
+function similarity(a, b){
+  const A = trigrams(a), B = trigrams(b);
+  let hit = 0;
+  A.forEach(t => { if (B.has(t)) hit++; });
+  return (2 * hit) / (A.size + B.size);
+}
+
+function suggest(query){
+  const nq = norm(query);
+  if (!nq) return [];
+  const qGrade = gradeOf(nq);
+  const scored = [];
+  for (const name of NAMES){
+    let score = 0;
+    if (name.startsWith(nq)) score = 1000 - (name.length - nq.length);
+    else if (name.includes(nq)) score = 700 - (name.length - nq.length);
+    else {
+      const sim = similarity(nq, name);
+      if (sim < 0.34) continue;
+      score = Math.round(sim * 500);
+    }
+    // A different grade means a different product. Push those far down rather
+    // than letting 'alexia 40' drift towards 'Alexia 100'.
+    const nGrade = gradeOf(name);
+    if (qGrade && nGrade && qGrade !== nGrade) score -= 420;
+    else if (qGrade && nGrade && qGrade === nGrade) score += 60;
+    scored.push({ name, score });
+  }
+  scored.sort((a, b) => b.score - a.score || a.name.length - b.name.length);
+  return scored.slice(0, 10);
+}
+
+function matchingCategories(query){
+  const nq = norm(query);
+  if (nq.length < 3) return [];
+  return DATA.categories.filter(c => norm(c).includes(nq));
+}
+
+/* ---- rendering --------------------------------------------------------- */
+function cellHTML(row, brand, matchBrand){
+  const cell = row.cells[brand.id] || { state: 'unknown' };
+  const isMatch = brand.id === matchBrand;
+  const tags = [];
+  let body;
+
+  if (cell.state === 'products'){
+    body = cell.products.map(p => {
+      p.specs.forEach(s => tags.push(['spec', s]));
+      if (p.obsolete) tags.push(['obs', 'Obsolete']);
+      if (p.approximate) tags.push(['approx', 'Closest match']);
+      let h = markGrades(p.name);
+      if (p.also) h += '<span class="also">also written &ldquo;' + esc(p.also) + '&rdquo;</span>';
+      return h;
+    }).join('<br>');
+    (cell.warn || []).forEach(w => tags.push(['warn', w]));
+  } else if (cell.state === 'none'){
+    body = '<span class="none">No equivalent</span>';
+  } else {
+    body = '<span class="none">Not listed</span>';
+  }
+
+  return '<div class="line' + (isMatch ? ' is-match' : '') +
+         (cell.state === 'products' ? '' : ' is-empty') + '">' +
+    '<span class="logo"><img src="' + LOGOS[brand.id] + '" alt="' + esc(brand.name) + '"></span>' +
+    '<span class="brand">' + esc(brand.name) + '</span>' +
+    '<span class="prod">' + body + '</span>' +
+    '<span class="tags">' +
+      tags.map(t => '<span class="tag ' + t[0] + '">' + esc(t[1]) + '</span>').join('') +
+    '</span></div>';
+}
+
+function rowHTML(row, matchBrand, matchName){
+  const ordered = BRANDS.slice().sort((a, b) =>
+    (b.id === matchBrand ? 1 : 0) - (a.id === matchBrand ? 1 : 0));
+  return '<article class="card" data-row="' + row.id + '">' +
+    '<div class="card-head">' +
+      '<span class="cat">' + esc(row.category) + '</span>' +
+      '<span class="spacer"></span>' +
+      '<span class="srcref">Excel row ' + row.id + '</span>' +
+    '</div>' +
+    ordered.map(b => cellHTML(row, b, matchBrand)).join('') +
+    '<div class="card-foot">' +
+      '<button class="btn" data-copy="row" data-row="' + row.id + '">Copy all equivalents</button>' +
+      (matchBrand
+        ? '<button class="btn" data-copy="line" data-row="' + row.id +
+          '" data-brand="' + matchBrand + '">Copy as one line</button>'
+        : '') +
+    '</div></article>';
+}
+
+function productsOf(row, brandId){
+  const c = row.cells[brandId];
+  return (c && c.state === 'products') ? c.products.map(p => p.name) : [];
+}
+
+function copyRowText(row){
+  return BRANDS.map(b => {
+    const c = row.cells[b.id];
+    let v = 'not listed';
+    if (c && c.state === 'products') v = c.products.map(p => p.name).join(' / ');
+    else if (c && c.state === 'none') v = 'no equivalent';
+    return b.name + '\t' + v;
+  }).join('\n');
+}
+
+function copyLineText(row, brandId){
+  const src = productsOf(row, brandId).join(' / ') || '(unknown)';
+  const others = BRANDS.filter(b => b.id !== brandId)
+    .map(b => ({ b, p: productsOf(row, b.id) }))
+    .filter(x => x.p.length)
+    .map(x => x.p.join(' / ') + ' (' + x.b.name + ')');
+  return src + ' (' + BRAND_NAME[brandId] + ') = ' + others.join(', ') + '  [' + row.category + ']';
+}
+
+/* Copy has to work when the file is opened by double-clicking it, and the async
+   clipboard API is not dependable on file:// across browsers. Try it, fall back to
+   the old execCommand path, and report honestly if both are refused. */
+function copyText(text){
+  const legacy = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(text)
+      .then(() => true)
+      .catch(() => legacy());
+  }
+  return Promise.resolve(legacy());
+}
+
+/* ---- views ------------------------------------------------------------- */
+function showRows(hits, matchName){
+  $out.innerHTML = hits.map(h => rowHTML(ROWS[h.r], h.b, matchName)).join('');
+}
+
+function showNotFound(query){
+  $out.innerHTML =
+    '<div class="state miss"><h2>Not found in the equivalents table</h2>' +
+    '<p>Nothing matches &ldquo;' + esc(query) + '&rdquo;. Check the spelling, ' +
+    'try just the product family without the grade, or browse a category below.</p></div>' +
+    browseHTML();
+}
+
+function browseHTML(){
+  return '<div class="browse" style="margin-top:18px"><h2>Browse by category</h2><div class="chips">' +
+    DATA.categories.map(c => '<button class="chip" data-cat="' + esc(c) + '">' + esc(c) + '</button>').join('') +
+    '</div></div>';
+}
+
+function showCategory(cat){
+  const rows = ROWS.filter(r => r.category === cat);
+  $out.innerHTML = '<div class="notice"><b>' + esc(cat) + '</b> &middot; ' + rows.length +
+    ' equivalence ' + (rows.length === 1 ? 'row' : 'rows') + '</div>' +
+    rows.map(r => rowHTML(r, null, null)).join('');
+}
+
+function showStart(){
+  $picker.innerHTML = '';
+  $hint.innerHTML = '<b>' + DATA.meta.rows + '</b> equivalence rows &middot; <b>' +
+    DATA.meta.brands + '</b> brands &middot; <b>' + DATA.meta.categories + '</b> categories';
+  $out.innerHTML =
+    '<div class="notice">Type any product name and every equivalent appears together. ' +
+    'Search works from <b>any</b> brand &mdash; the table reads in all directions.</div>' +
+    browseHTML();
+}
+
+/* ---- the search rule --------------------------------------------------- *
+ * An exact name resolves straight to its row(s). Anything else is offered as
+ * a list you must click. Nothing is ever auto-selected: a silent jump from
+ * 'Alexia 40' to 'Alexia 100' would put a wrong product into a quote.
+ * ------------------------------------------------------------------------ */
+function run(){
+  const query = $q.value.trim();
+  $clear.hidden = !query;
+
+  if (!query){ showStart(); return; }
+
+  const nq = norm(query);
+  const exact = INDEX[nq];
+
+  const cats = matchingCategories(query);
+  if (!exact && cats.length === 1 && norm(cats[0]) === nq){
+    $picker.innerHTML = '';
+    $hint.textContent = 'Category';
+    showCategory(cats[0]);
+    return;
+  }
+
+  if (exact){
+    $picker.innerHTML = '';
+    $hint.innerHTML = exact.length === 1
+      ? 'Exact match'
+      : 'Exact match &middot; this product appears on <b>' + exact.length + '</b> rows';
+    showRows(exact, nq);
+    return;
+  }
+
+  const options = suggest(query);
+  if (!options.length && !cats.length){
+    $picker.innerHTML = '';
+    $hint.textContent = 'No match';
+    showNotFound(query);
+    return;
+  }
+
+  $hint.textContent = 'No exact match';
+  const items = [];
+  cats.forEach(c => items.push(
+    '<li><button data-cat="' + esc(c) + '">' +
+    '<span class="nm">' + esc(c) + '</span>' +
+    '<span class="ct">Category</span></button></li>'));
+  options.forEach(o => {
+    const first = INDEX[o.name][0];
+    const row = ROWS[first.r];
+    const disp = (row.cells[first.b].products.find(p => norm(p.name) === o.name) || {}).name || o.name;
+    items.push('<li><button data-pick="' + esc(o.name) + '">' +
+      '<span class="nm">' + markGrades(disp) + '</span>' +
+      '<span class="bd">' + esc(BRAND_NAME[first.b]) + '</span>' +
+      '<span class="ct">' + esc(row.category) + '</span></button></li>');
+  });
+  $picker.innerHTML =
+    '<p class="pick-note">Nothing matches that exactly. Pick the right one &mdash; ' +
+    'grade numbers are highlighted so they are easy to compare.</p>' +
+    '<ul class="suggest">' + items.join('') + '</ul>';
+  $out.innerHTML = '';
+}
+
+/* ---- events ------------------------------------------------------------ */
+$q.addEventListener('input', run);
+$clear.addEventListener('click', () => { $q.value = ''; $q.focus(); run(); });
+
+document.addEventListener('click', e => {
+  const pick = e.target.closest('[data-pick]');
+  if (pick){
+    const key = pick.getAttribute('data-pick');
+    $picker.innerHTML = '';
+    $hint.textContent = 'Selected';
+    showRows(INDEX[key], key);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  const cat = e.target.closest('[data-cat]');
+  if (cat){
+    $picker.innerHTML = '';
+    $q.value = cat.getAttribute('data-cat');
+    $clear.hidden = false;
+    $hint.textContent = 'Category';
+    showCategory(cat.getAttribute('data-cat'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  const copy = e.target.closest('[data-copy]');
+  if (copy){
+    const row = ROWS.find(r => String(r.id) === copy.getAttribute('data-row'));
+    const text = copy.getAttribute('data-copy') === 'row'
+      ? copyRowText(row)
+      : copyLineText(row, copy.getAttribute('data-brand'));
+    const was = copy.textContent;
+    copyText(text).then(ok => {
+      copy.textContent = ok ? 'Copied' : 'Press Ctrl+C';
+      if (ok) copy.classList.add('done');
+      if (!ok) window.prompt('Copy the text below, then close this box:', text);
+      setTimeout(() => { copy.textContent = was; copy.classList.remove('done'); }, 1400);
+    });
+  }
+});
+
+$q.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown'){
+    const first = $picker.querySelector('button');
+    if (first){ e.preventDefault(); first.focus(); }
+  }
+});
+$picker.addEventListener('keydown', e => {
+  const buttons = [...$picker.querySelectorAll('button')];
+  const i = buttons.indexOf(document.activeElement);
+  if (i < 0) return;
+  if (e.key === 'ArrowDown'){ e.preventDefault(); (buttons[i + 1] || buttons[0]).focus(); }
+  if (e.key === 'ArrowUp'){
+    e.preventDefault();
+    if (i === 0) $q.focus(); else buttons[i - 1].focus();
+  }
+});
+
+/* ---- provenance -------------------------------------------------------- *
+ * A quote built from a stale table is the failure mode nobody notices, so the
+ * source and its date stay on screen.
+ * ------------------------------------------------------------------------ */
+document.getElementById('foot').innerHTML =
+  '<span>Source: <code>' + esc(DATA.meta.source_file) + '</code></span>' +
+  '<span>Workbook last modified <b>' + esc((DATA.meta.source_modified || '').slice(0, 10)) + '</b></span>' +
+  '<span>Tool built ' + esc(DATA.meta.generated) + '</span>' +
+  '<span>Equivalents are guidance for quoting &mdash; confirm against the maker&rsquo;s ' +
+  'specification before supply.</span>';
+
+showStart();
+$q.focus();
+</script>
+</body>
+</html>

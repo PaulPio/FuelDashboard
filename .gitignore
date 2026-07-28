@@ -1,4 +1,5 @@
 __pycache__/
 *.pyc
 .playwright-mcp/
-*.xlsx
+.vercel/
+.env*.local

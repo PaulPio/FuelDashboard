@@ -30,6 +30,43 @@ every brand on the row agrees on the grade.
 into Excel or an email cleanly. **Copy as one line** writes it as a sentence for a
 quote.
 
+## Building a quote list
+
+Working through a vessel's requirements usually means several products at once, so
+the tool keeps a list.
+
+Press **Add** on the brand line you intend to supply. The item is saved with *both*
+sides of the decision — what you are supplying and what it replaces — so a week later
+the list still explains itself:
+
+> **Melina S 30** (Shell) — replaces **Mobilgard 300** (ExxonMobil) — System Oils
+
+Open it from **Quote list** in the top right. You can put a quantity or pack size
+against each line (free text, so `2 x 208L drum` is fine), remove single items, or
+clear the lot. Press **Add** again on anything already listed to take it off.
+
+Any caveat on a product follows it onto the list — *obsolete*, *closest match*, or
+*listed as a Fuchs product* — so a warning can't be lost between finding the product
+and quoting it.
+
+**Copy for email** gives a readable list. **Copy for Excel** gives seven columns
+(what they use, their brand, what you supply, your brand, category, quantity, source
+row) that paste straight into a spreadsheet.
+
+### Where the list lives
+
+In the browser's own storage, on that computer. Nothing is sent anywhere.
+
+Two consequences worth knowing:
+
+- **The list is per copy.** A list built on the hosted page is a different list from
+  one built in the emailed file, and neither syncs to a colleague. It is a scratchpad
+  for one person building one quote, not shared state.
+- **It survives closing the browser**, but clearing browsing data will wipe it. If a
+  browser blocks storage entirely — which some do for files opened by double-clicking
+  — the tool says so at the top of the list rather than losing the work quietly. Copy
+  it out before you close the page if you see that message.
+
 ### What the greyed-out entries mean
 
 These are different facts, and the tool keeps them apart:

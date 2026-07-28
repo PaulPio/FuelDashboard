@@ -38,6 +38,83 @@ body{
 }
 .masthead .spacer{flex:1}
 .masthead .place{font-size:12px;color:#5D7183;letter-spacing:.04em}
+.cart-btn{
+  font:inherit;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  background:none;border:1px solid #33475A;color:#C6D3DE;padding:6px 12px;border-radius:3px;
+  cursor:pointer;display:flex;align-items:center;gap:8px;
+}
+.cart-btn:hover{border-color:var(--oil);color:#fff}
+.cart-btn:focus-visible{outline:2px solid var(--oil);outline-offset:2px}
+.cart-btn .n{
+  background:var(--oil);color:#fff;border-radius:99px;min-width:19px;padding:1px 6px;
+  font-size:11px;letter-spacing:0;text-align:center;
+}
+.cart-btn .n[data-zero="1"]{background:#33475A;color:#8DA2B4}
+
+/* --- add-to-list buttons on each result line ---------------------------- */
+.act{flex:none;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.add{
+  font:inherit;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:3px;
+  border:1px solid var(--rule);background:var(--card);color:var(--steel);cursor:pointer;
+  white-space:nowrap;
+}
+.add:hover{border-color:var(--oil);color:var(--oil);background:var(--oil-soft)}
+.add:focus-visible{outline:2px solid var(--oil);outline-offset:1px}
+.add[data-in="1"]{background:var(--oil);border-color:var(--oil);color:#fff}
+
+/* --- quote list drawer -------------------------------------------------- */
+.scrim{
+  position:fixed;inset:0;background:rgba(15,25,34,.45);z-index:40;
+  opacity:0;pointer-events:none;transition:opacity .18s;
+}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:0;right:0;height:100%;width:min(440px,100%);z-index:50;
+  background:var(--card);border-left:1px solid var(--rule);display:flex;flex-direction:column;
+  transform:translateX(101%);transition:transform .2s ease-out;box-shadow:-8px 0 28px rgba(15,25,34,.13);
+}
+.drawer.open{transform:none}
+.drawer-head{
+  display:flex;align-items:center;gap:12px;padding:15px 18px;
+  border-bottom:1px solid var(--rule);background:var(--ink);color:#fff;
+}
+.drawer-head h2{margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.drawer-head .spacer{flex:1}
+.drawer-head button{
+  background:none;border:0;color:#8DA2B4;font-size:24px;line-height:1;cursor:pointer;padding:2px 8px;border-radius:3px;
+}
+.drawer-head button:hover{color:#fff}
+.drawer-head button:focus-visible{outline:2px solid var(--oil);outline-offset:1px}
+.drawer-body{flex:1;overflow-y:auto;padding:6px 18px 18px}
+.drawer-foot{border-top:1px solid var(--rule);padding:13px 18px;background:#FAFBFC;display:flex;gap:8px;flex-wrap:wrap}
+
+.item{padding:13px 0;border-bottom:1px solid var(--rule)}
+.item:last-child{border-bottom:0}
+.item .top{display:flex;align-items:baseline;gap:9px}
+.item .supply{font-family:var(--mono);font-size:15px;flex:1;min-width:0;word-break:break-word}
+.item .supply .g{color:var(--oil);font-weight:700}
+.item .brand-of{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--haze);font-weight:600}
+.item .swap{font-size:12.5px;color:var(--haze);margin-top:3px}
+.item .swap b{color:var(--steel);font-weight:600;font-family:var(--mono);font-size:12.5px}
+.item .meta{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--haze);margin-top:5px}
+.item .row2{display:flex;align-items:center;gap:8px;margin-top:8px}
+.item input{
+  font:inherit;font-size:13px;padding:5px 9px;border:1px solid var(--rule);border-radius:3px;
+  width:150px;background:var(--card);color:var(--ink);
+}
+.item input:focus{outline:none;border-color:var(--oil);box-shadow:0 0 0 2px var(--oil-soft)}
+.item .drop{
+  font:inherit;font-size:12px;background:none;border:0;color:var(--flag);cursor:pointer;
+  padding:5px 7px;border-radius:3px;margin-left:auto;
+}
+.item .drop:hover{background:var(--flag-soft)}
+.item .drop:focus-visible{outline:2px solid var(--flag);outline-offset:1px}
+.item .flag-warn{font-size:11.5px;color:var(--oil);margin-top:5px;font-weight:600}
+.drawer .empty{text-align:center;color:var(--haze);font-size:14px;padding:44px 10px}
+.drawer .nostore{
+  background:var(--flag-soft);border:1px solid #E4C9C5;color:#7A2A20;border-radius:3px;
+  padding:9px 12px;font-size:12.5px;margin:14px 0 0;
+}
 
 /* --- search ------------------------------------------------------------- */
 .search-zone{background:var(--card);border-bottom:1px solid var(--rule)}
@@ -171,8 +248,10 @@ footer code{font-family:var(--mono);font-size:11.5px}
   .logo{order:1;width:58px;height:20px}
   .prod{order:4;flex-basis:100%;font-size:15px}
   .tags{order:3;justify-content:flex-start;max-width:none}
+  .act{order:5;flex-direction:row;margin-left:auto}
   .field input{font-size:18px}
   .card-head,.card-foot{padding-left:14px;padding-right:14px}
+  .masthead h1{width:100%;order:3}
 }
 @media (prefers-reduced-motion:no-preference){
   .card{animation:rise .18s ease-out}
@@ -180,7 +259,9 @@ footer code{font-family:var(--mono);font-size:11.5px}
 }
 @media print{
   body{background:#fff}
-  .search-zone,footer,.card-foot,.browse,.masthead .place{display:none}
+  .search-zone,footer,.card-foot,.browse,.masthead .place,.act,.cart-btn,.scrim{display:none}
+  .drawer{position:static;transform:none;width:auto;border:0;box-shadow:none;height:auto}
+  .drawer-foot,.drawer-head button{display:none}
   .card{border-color:#999;break-inside:avoid}
   .line.is-match{background:none;box-shadow:inset 3px 0 0 #000}
   .prod .g{color:#000}
@@ -195,6 +276,9 @@ footer code{font-family:var(--mono);font-size:11.5px}
     <h1>Lubricant Equivalents</h1>
     <span class="spacer"></span>
     <span class="place">Valencia</span>
+    <button class="cart-btn" id="cartBtn" type="button" aria-haspopup="dialog" aria-expanded="false">
+      Quote list <span class="n" id="cartCount" data-zero="1">0</span>
+    </button>
   </div>
 </header>
 
@@ -215,6 +299,21 @@ footer code{font-family:var(--mono);font-size:11.5px}
 <main>
   <div class="wrap" id="out" aria-live="polite"></div>
 </main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Quote list" aria-hidden="true">
+  <div class="drawer-head">
+    <h2>Quote list</h2>
+    <span class="spacer"></span>
+    <button type="button" id="drawerClose" aria-label="Close quote list">&times;</button>
+  </div>
+  <div class="drawer-body" id="cartItems"></div>
+  <div class="drawer-foot">
+    <button class="btn" type="button" data-cart="email">Copy for email</button>
+    <button class="btn" type="button" data-cart="excel">Copy for Excel</button>
+    <button class="btn" type="button" data-cart="clear">Clear list</button>
+  </div>
+</aside>
 
 <footer>
   <div class="wrap" id="foot"></div>
@@ -294,7 +393,7 @@ function cellHTML(row, brand, matchBrand){
   const cell = row.cells[brand.id] || { state: 'unknown' };
   const isMatch = brand.id === matchBrand;
   const tags = [];
-  let body;
+  let body, actions = '';
 
   if (cell.state === 'products'){
     body = cell.products.map(p => {
@@ -306,6 +405,17 @@ function cellHTML(row, brand, matchBrand){
       return h;
     }).join('<br>');
     (cell.warn || []).forEach(w => tags.push(['warn', w]));
+
+    // One add button per product, so a cell holding two products stays unambiguous.
+    actions = cell.products.map((p, i) => {
+      const on = inCart(row.id, brand.id, i);
+      const label = cell.products.length > 1
+        ? 'Add ' + esc(p.name.split(' ')[0])
+        : (on ? 'On list' : 'Add');
+      return '<button class="add" type="button" data-add="' + row.id + '|' + brand.id + '|' + i +
+             '" data-in="' + (on ? 1 : 0) + '" title="Add ' + esc(p.name) + ' to the quote list">' +
+             (cell.products.length > 1 && on ? '&#10003; ' : '') + label + '</button>';
+    }).join('');
   } else if (cell.state === 'none'){
     body = '<span class="none">No equivalent</span>';
   } else {
@@ -319,7 +429,8 @@ function cellHTML(row, brand, matchBrand){
     '<span class="prod">' + body + '</span>' +
     '<span class="tags">' +
       tags.map(t => '<span class="tag ' + t[0] + '">' + esc(t[1]) + '</span>').join('') +
-    '</span></div>';
+    '</span>' +
+    '<span class="act">' + actions + '</span></div>';
 }
 
 function rowHTML(row, matchBrand, matchName){
@@ -389,8 +500,158 @@ function copyText(text){
   return Promise.resolve(legacy());
 }
 
+/* ---- quote list -------------------------------------------------------- *
+ * A quote is a set of decisions: "they use X, we supply Y". Each item keeps
+ * both sides, so the list can be pasted straight into a quote without anyone
+ * having to remember what prompted each line.
+ *
+ * Kept in localStorage. That is per-browser and per-copy: a list built on the
+ * hosted page is not the same list as one built in the emailed file. Under
+ * file:// some browsers refuse storage outright, so every access is guarded
+ * and the drawer says so plainly rather than losing work silently.
+ * ------------------------------------------------------------------------ */
+const STORE_KEY = 'stemfuels.quotelist.v1';
+let CART = [];
+let STORAGE_OK = true;
+let ANCHOR = {};   // rowId -> {brand, product} the customer named
+
+function readStore(){
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    CART = Array.isArray(parsed) ? parsed.filter(x => x && x.row && x.brand) : [];
+  } catch (e){
+    STORAGE_OK = false;
+    CART = [];
+  }
+}
+function writeStore(){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(CART)); }
+  catch (e){ STORAGE_OK = false; }
+}
+
+const itemKey = (row, brand, idx) => row + '|' + brand + '|' + idx;
+function inCart(row, brand, idx){
+  return CART.some(i => i.k === itemKey(row, brand, idx));
+}
+
+function addItem(row, brand, idx){
+  const k = itemKey(row, brand, idx);
+  if (CART.some(i => i.k === k)) return false;
+  const rowObj = ROWS.find(r => r.id === row);
+  const product = rowObj.cells[brand].products[idx];
+  const anchor = ANCHOR[row];
+  CART.push({
+    k: k,
+    row: row,
+    cat: rowObj.category,
+    brand: brand,
+    product: product.name,
+    obsolete: !!product.obsolete,
+    approximate: !!product.approximate,
+    warn: (rowObj.cells[brand].warn || [])[0] || null,
+    forBrand: anchor && anchor.brand !== brand ? anchor.brand : null,
+    forProduct: anchor && anchor.brand !== brand ? anchor.product : null,
+    qty: ''
+  });
+  writeStore();
+  return true;
+}
+
+function removeItem(k){
+  CART = CART.filter(i => i.k !== k);
+  writeStore();
+}
+
+function renderCart(){
+  const n = CART.length;
+  const $n = document.getElementById('cartCount');
+  $n.textContent = n;
+  $n.setAttribute('data-zero', n ? '0' : '1');
+
+  const body = document.getElementById('cartItems');
+  if (!n){
+    body.innerHTML = '<p class="empty">Nothing on the list yet.<br>Search for a product and press ' +
+      '<b>Add</b> next to the one you plan to supply.</p>' +
+      (STORAGE_OK ? '' : '<p class="nostore">This browser is blocking local storage, so the ' +
+       'list will be lost when the page closes. Copy it out before you finish.</p>');
+    return;
+  }
+  body.innerHTML =
+    (STORAGE_OK ? '' : '<p class="nostore">This browser is blocking local storage, so the list ' +
+      'will be lost when the page closes. Copy it out before you finish.</p>') +
+    CART.map(i =>
+      '<div class="item">' +
+        '<div class="top">' +
+          '<span class="supply">' + markGrades(i.product) + '</span>' +
+          '<span class="brand-of">' + esc(BRAND_NAME[i.brand] || i.brand) + '</span>' +
+        '</div>' +
+        (i.forProduct
+          ? '<div class="swap">replaces <b>' + esc(i.forProduct) + '</b> (' +
+            esc(BRAND_NAME[i.forBrand] || i.forBrand) + ')</div>'
+          : '') +
+        '<div class="meta">' + esc(i.cat) + ' &middot; row ' + i.row + '</div>' +
+        (i.obsolete ? '<div class="flag-warn">Marked obsolete in the table</div>' : '') +
+        (i.approximate ? '<div class="flag-warn">Closest match, not exact</div>' : '') +
+        (i.warn ? '<div class="flag-warn">' + esc(i.warn) + '</div>' : '') +
+        '<div class="row2">' +
+          '<input type="text" placeholder="Qty / pack" value="' + esc(i.qty || '') +
+            '" data-qty="' + esc(i.k) + '" aria-label="Quantity or pack size for ' + esc(i.product) + '">' +
+          '<button class="drop" type="button" data-drop="' + esc(i.k) + '">Remove</button>' +
+        '</div>' +
+      '</div>').join('');
+}
+
+function refreshAddButtons(){
+  document.querySelectorAll('[data-add]').forEach(b => {
+    const [row, brand, idx] = b.getAttribute('data-add').split('|');
+    const on = inCart(Number(row), brand, Number(idx));
+    b.setAttribute('data-in', on ? '1' : '0');
+    if (!/^Add [A-Za-z]/.test(b.textContent.trim().replace('✓ ', ''))){
+      b.textContent = on ? 'On list' : 'Add';
+    }
+  });
+}
+
+function cartEmailText(){
+  return CART.map(i => {
+    let s = i.product + ' (' + (BRAND_NAME[i.brand] || i.brand) + ')';
+    if (i.qty) s += ' - ' + i.qty;
+    if (i.forProduct) s += '  [replaces ' + i.forProduct + ' (' +
+      (BRAND_NAME[i.forBrand] || i.forBrand) + ')]';
+    return s + '  - ' + i.cat;
+  }).join('\n');
+}
+function cartExcelText(){
+  const head = ['Currently using', 'Their brand', 'We supply', 'Our brand',
+                'Category', 'Qty / pack', 'Source row'].join('\t');
+  return head + '\n' + CART.map(i => [
+    i.forProduct || '', BRAND_NAME[i.forBrand] || '',
+    i.product, BRAND_NAME[i.brand] || i.brand,
+    i.cat, i.qty || '', i.row
+  ].join('\t')).join('\n');
+}
+
+function openDrawer(open){
+  document.getElementById('drawer').classList.toggle('open', open);
+  document.getElementById('scrim').classList.toggle('open', open);
+  document.getElementById('drawer').setAttribute('aria-hidden', open ? 'false' : 'true');
+  document.getElementById('cartBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (open) document.getElementById('drawerClose').focus();
+  else document.getElementById('cartBtn').focus();
+}
+
 /* ---- views ------------------------------------------------------------- */
 function showRows(hits, matchName){
+  // Remember what the customer actually named, so an added item can say what it replaces.
+  ANCHOR = {};
+  hits.forEach(h => {
+    const row = ROWS[h.r], cell = row.cells[h.b];
+    if (!cell || cell.state !== 'products') return;
+    const hit = cell.products.find(p => norm(p.name) === matchName ||
+                                        (p.also && norm(p.also) === matchName));
+    ANCHOR[row.id] = { brand: h.b, product: (hit || cell.products[0]).name };
+  });
   $out.innerHTML = hits.map(h => rowHTML(ROWS[h.r], h.b, matchName)).join('');
 }
 
@@ -409,6 +670,7 @@ function browseHTML(){
 }
 
 function showCategory(cat){
+  ANCHOR = {};   // browsing a category: nothing was named, so nothing is being replaced
   const rows = ROWS.filter(r => r.category === cat);
   $out.innerHTML = '<div class="notice"><b>' + esc(cat) + '</b> &middot; ' + rows.length +
     ' equivalence ' + (rows.length === 1 ? 'row' : 'rows') + '</div>' +
@@ -490,7 +752,63 @@ function run(){
 $q.addEventListener('input', run);
 $clear.addEventListener('click', () => { $q.value = ''; $q.focus(); run(); });
 
+document.getElementById('cartBtn').addEventListener('click', () => openDrawer(true));
+document.getElementById('drawerClose').addEventListener('click', () => openDrawer(false));
+document.getElementById('scrim').addEventListener('click', () => openDrawer(false));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('drawer').classList.contains('open')){
+    openDrawer(false);
+  }
+});
+
+document.getElementById('cartItems').addEventListener('input', e => {
+  const q = e.target.closest('[data-qty]');
+  if (!q) return;
+  const item = CART.find(i => i.k === q.getAttribute('data-qty'));
+  if (item){ item.qty = q.value; writeStore(); }
+});
+
 document.addEventListener('click', e => {
+  const add = e.target.closest('[data-add]');
+  if (add){
+    const [row, brand, idx] = add.getAttribute('data-add').split('|');
+    const added = addItem(Number(row), brand, Number(idx));
+    if (!added) removeItem(itemKey(Number(row), brand, Number(idx)));
+    renderCart();
+    refreshAddButtons();
+    return;
+  }
+  const drop = e.target.closest('[data-drop]');
+  if (drop){
+    removeItem(drop.getAttribute('data-drop'));
+    renderCart();
+    refreshAddButtons();
+    return;
+  }
+  const cartAct = e.target.closest('[data-cart]');
+  if (cartAct){
+    const what = cartAct.getAttribute('data-cart');
+    if (what === 'clear'){
+      if (CART.length && window.confirm('Remove all ' + CART.length + ' items from the quote list?')){
+        CART = [];
+        writeStore();
+        renderCart();
+        refreshAddButtons();
+      }
+      return;
+    }
+    if (!CART.length) return;
+    const was = cartAct.textContent;
+    copyText(what === 'email' ? cartEmailText() : cartExcelText()).then(ok => {
+      cartAct.textContent = ok ? 'Copied' : 'Press Ctrl+C';
+      if (ok) cartAct.classList.add('done');
+      if (!ok) window.prompt('Copy the text below, then close this box:',
+                             what === 'email' ? cartEmailText() : cartExcelText());
+      setTimeout(() => { cartAct.textContent = was; cartAct.classList.remove('done'); }, 1400);
+    });
+    return;
+  }
+
   const pick = e.target.closest('[data-pick]');
   if (pick){
     const key = pick.getAttribute('data-pick');
@@ -554,6 +872,8 @@ document.getElementById('foot').innerHTML =
   '<span>Equivalents are guidance for quoting &mdash; confirm against the maker&rsquo;s ' +
   'specification before supply.</span>';
 
+readStore();
+renderCart();
 showStart();
 $q.focus();
 </script>
